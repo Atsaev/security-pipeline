@@ -1,0 +1,11 @@
+[project]
+name = "securitypipeline"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.28.1",
+    "pydantic>=2.13.3",
+    "python-dotenv>=1.2.2",
+    "schedule>=1.2.2",
+    "sqlalchemy>=2.0.49",
+]
