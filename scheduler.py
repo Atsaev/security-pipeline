@@ -10,8 +10,8 @@ def job():
     print('\n запуск по расписанию...')
     run_pipeline(days=1)
 
-# schedule.every().day.at('09:00').do(job)
-schedule.every(5).minutes.do(job)
+schedule.every().day.at('09:00').do(job)
+# schedule.every(5).minutes.do(job)  # для теста запуск каждые 5 минут
 print("Планировщик запущен. Ожидаю расписания...")
 print("   Следующий запуск:", schedule.next_run())
 job()
