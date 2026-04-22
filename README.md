@@ -70,6 +70,7 @@ security-pipeline/
 ```
 
 ## Example Output
+```
 ▶ Запуск pipeline: последние 30 дней
 Запрос к NVD API...
 Всего найдено в API: 6204
@@ -87,3 +88,4 @@ HIGH: 5
 CRITICAL: 1
 💾 Сохранение в БД:
 Сохранено новых: 20
+```
