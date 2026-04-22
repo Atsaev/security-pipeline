@@ -55,6 +55,7 @@ This project automatically fetches recent CVE data from the NVD API, cleans and 
 - Runs automatically on a daily schedule
 
 ## Project Structure
+```
 security-pipeline/
 ├── collectors/
 │   └── nvd_collector.py   # NVD API client
@@ -66,6 +67,7 @@ security-pipeline/
 │   └── cve.py             # Pydantic data models
 ├── main.py                # pipeline entry point
 └── scheduler.py           # daily scheduler
+```
 
 ## Example Output
 ▶ Запуск pipeline: последние 30 дней
