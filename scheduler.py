@@ -10,12 +10,16 @@ def job():
     print('\n запуск по расписанию...')
     run_pipeline(days=1)
 
-schedule.every().day.at('09:00').do(job)
-# schedule.every(5).minutes.do(job)  # для теста запуск каждые 5 минут
-print("Планировщик запущен. Ожидаю расписания...")
-print("   Следующий запуск:", schedule.next_run())
-job()
 
-while True:
-    schedule.run_pending()
-    time.sleep(60)
+def run_scheduler():
+    schedule.every().day.at('09:00').do(job)
+    print("Планировщик запущен. Ожидаю расписания...")
+    print("   Следующий запуск:", schedule.next_run())
+    job()
+    while True:
+        schedule.run_pending()
+        time.sleep(60)
+
+
+if __name__ == "__main__":
+    run_scheduler()

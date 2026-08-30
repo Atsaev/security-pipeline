@@ -1,6 +1,6 @@
-from sqlalchemy import create_engine, Column, String, Float, DateTime, JSON
+from sqlalchemy import create_engine, Column, String, Float, DateTime, JSON, func, select
 from sqlalchemy.orm import DeclarativeBase, Session
-from sqlalchemy import select
+
 from models.cve import CVEModel
 
 class Base(DeclarativeBase):
@@ -44,3 +44,24 @@ class Database:
             stmt = select(CVERecord).filter_by(severity=severity.upper())
             return list(session.scalars(stmt).all())
 
+    def count(self, stmt) -> int:
+        with Session(self.engine) as session:
+            return session.scalar(select(func.count()).select_from(stmt.subquery())) or 0
+
+    def query(self, stmt) -> list[dict]:
+        with Session(self.engine) as session:
+            rows = session.scalars(stmt).all()
+            return [self._to_dict(r) for r in rows]
+
+    @staticmethod
+    def _to_dict(r: CVERecord) -> dict:
+        return {
+            "cve_id": r.cve_id,
+            "description": r.description,
+            "severity": r.severity,
+            "cvss_score": r.cvss_score,
+            "published_date": r.published_date.isoformat() if r.published_date else None,
+            "last_modified": r.last_modified.isoformat() if r.last_modified else None,
+            "affected_products": r.affected_products or [],
+            "references": r.references or [],
+        }

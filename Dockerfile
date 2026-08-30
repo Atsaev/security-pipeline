@@ -10,4 +10,4 @@ COPY . .
 RUN pip install uv
 RUN uv sync
 
-CMD ["uv", "run", "scheduler.py"]
+CMD ["uv", "run", "run.py"]
