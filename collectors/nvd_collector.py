@@ -16,7 +16,7 @@ NVD_API_KEY = os.getenv('NVD_TOKEN')
 class NVDCollector:
     def __init__(self):
         api_key = NVD_API_KEY
-        self.headers = {'api_key': api_key}
+        self.headers = {'apiKey': api_key}
 
     def _parse_item(self, item: dict) -> CVEModel | None:
         try:
@@ -34,6 +34,10 @@ class NVDCollector:
                 cvss = metrics['cvssMetricV31'][0]['cvssData']
                 cvss_score = cvss['baseScore']
                 severity = cvss['baseSeverity']
+            elif 'cvssMetricV40' in metrics:
+                cvss = metrics['cvssMetricV40'][0]['cvssData']
+                cvss_score = cvss['baseScore']
+                severity = cvss.get('baseSeverity')
             elif 'cvssMetricV2' in metrics:
                 cvss = metrics['cvssMetricV2'][0]['cvssData']
                 cvss_score = cvss['baseScore']
@@ -86,5 +90,18 @@ class NVDCollector:
             if cve:
                 cves.append(cve)
         return cves
+
+    def fetch_by_id(self, cve_id: str) -> CVEModel | None:
+        """Один CVE по ID — для бэкфилла записей без severity."""
+        response = httpx.get(
+            NVD_API_URL, params={'cveId': cve_id},
+            headers=self.headers, timeout=30,
+        )
+        response.raise_for_status()
+        data = response.json()
+        vulns = data.get('vulnerabilities', [])
+        if not vulns:
+            return None
+        return self._parse_item(vulns[0])
 
 
